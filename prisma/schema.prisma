@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Feedback {
+  id               Int      @id @default(autoincrement())
+  name             String?  @db.VarChar(255)
+  branch           String   @db.VarChar(255)
+  rating           Int      @db.Integer
+  valuableTopic    String?  @map("valuable_topic") @db.Text
+  feedbackComments String?  @map("feedback_comments") @db.Text
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("feedback")
+  @@index([createdAt(sort: Desc)])
+  @@index([rating])
+  @@index([branch])
+}
